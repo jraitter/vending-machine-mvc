@@ -11,6 +11,8 @@ namespace vendingMachine_mvc.Services
 
     public void AddBeveragesToMessages()
     {
+      Messages.Add(new Message($"Money available: ${_store.MoneyAvailable:0.00##}", ConsoleColor.Green));
+
       for (int i = 0; i < _store.Beverages.Count; i++)
       {
         var beverage = _store.Beverages[i];
@@ -21,28 +23,24 @@ namespace vendingMachine_mvc.Services
             var bevSoda = (Soda)beverage;
             string message = $"{i + 1}. Name: {bevSoda.Name} Diet: {bevSoda.IsDiet}  PRICE: {bevSoda.Price} Type: {bevSoda.Bevtype}";
             Messages.Add(new Message(message));
-            continue;
           }
           else if (beverage is EnergyDrink)
           {
             var bevEnergy = (EnergyDrink)beverage;
             string message = $"{i + 1}. Name: {bevEnergy.Name} Diet: {bevEnergy.IsDiet}  PRICE: {bevEnergy.Price} Type: {bevEnergy.Bevtype}";
             Messages.Add(new Message(message));
-            continue;
           }
           else if (beverage is Juice)
           {
             var bevJuice = (Juice)beverage;
             string message = $"{i + 1}. Name: {bevJuice.Name} Flavor: {bevJuice.Fruit}  PRICE: {bevJuice.Price} Type: {bevJuice.Bevtype}";
             Messages.Add(new Message(message));
-            continue;
           }
           else if (beverage is Water)
           {
             var bevWater = (Water)beverage;
             string message = $"{i + 1}. Name: {bevWater.Name}  Has Calories: {bevWater.HasCalories}  PRICE: {bevWater.Price} Type: {bevWater.Bevtype}";
             Messages.Add(new Message(message));
-            continue;
           }
           else
           {
@@ -58,6 +56,31 @@ namespace vendingMachine_mvc.Services
 
     public void Vend(string indexString)
     {
+      if (int.TryParse(indexString, out int index) && index - 1 > -1 && index - 1 < _store.Beverages.Count)
+      {
+        Beverage bevToVend = _store.Beverages[index - 1];
+        if (bevToVend.Available)
+        {
+          if (bevToVend.Price > _store.MoneyAvailable)
+          {
+            Messages.Add(new Message("This item costs more than currently in machine, please add more quarters ", ConsoleColor.Red));
+            return;
+          }
+          bevToVend.Available = false;
+          _store.MoneyAvailable -= bevToVend.Price;
+          Messages.Add(new Message("Successfully vended out " + bevToVend.Name, ConsoleColor.Green));
+          Messages.Add(new Message($"Change available: ${_store.MoneyAvailable:0.00##}, please pick up your change.\n", ConsoleColor.Green));
+          _store.MoneyAvailable = 0;
+          return;
+        }
+      }
+      Messages.Add(new Message("Invalid Beverage Number", ConsoleColor.Red));
+    }
+
+    public void AddMoney()
+    {
+      _store.MoneyAvailable += .25f;
+      Messages.Add(new Message($"Money available: ${_store.MoneyAvailable:0.00##}", ConsoleColor.Green));
 
     }
 

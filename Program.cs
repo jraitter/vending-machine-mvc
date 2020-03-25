@@ -8,7 +8,6 @@ namespace vendingMachine_mvc
   {
     static void Main(string[] args)
     {
-      Console.WriteLine("Hello World!");
       VendingController vc = new VendingController();
       vc.Run();
     }

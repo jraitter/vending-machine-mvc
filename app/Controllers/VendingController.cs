@@ -12,6 +12,10 @@ namespace vendingMachine_mvc.Controllers
 
     public void Run()
     {
+      Print();
+      // Console.Clear();
+      // Console.WriteLine("Welcome to the vending machine application");
+
       while (_running)
       {
         //take input
@@ -24,8 +28,16 @@ namespace vendingMachine_mvc.Controllers
 
     private void GetUserInput()
     {
-      System.Console.WriteLine("What would you like to do (view, quit, vend)");
-      string input = Console.ReadLine().ToLower();
+      Console.ForegroundColor = ConsoleColor.Green;
+      System.Console.WriteLine("\n");
+      System.Console.Write(@"What would you like to do: 
+'view' to see list of available beverages
+'vend' to select a beverage
+'add'  to enter quaters
+'quit' to exit the application
+
+Selection: ");
+      string input = Console.ReadLine().Trim().ToLower();
       switch (input)
       {
         case "quit":
@@ -37,10 +49,13 @@ namespace vendingMachine_mvc.Controllers
         case "view":
           _vss.AddBeveragesToMessages();
           break;
-        case "rent":
-          System.Console.Write("Enter the movie number to rent: ");
+        case "vend":
+          System.Console.Write("Enter the number of the beverage: ");
           string indexString = Console.ReadLine();
           _vss.Vend(indexString);
+          break;
+        case "add":
+          _vss.AddMoney();
           break;
         default:
           //number check here if not hanlding with "rent"
@@ -60,7 +75,6 @@ namespace vendingMachine_mvc.Controllers
         Console.ForegroundColor = message.Color;
         Console.WriteLine(message.Body);
       }
-      //Console.ForegroundColor = ConsoleColor.White;
       _vss.Messages.Clear();
     }
 

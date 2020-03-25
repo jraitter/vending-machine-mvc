@@ -5,6 +5,7 @@ namespace vendingMachine_mvc.Models
   class Store
   {
     public List<Beverage> Beverages { get; set; }
+    public float MoneyAvailable { get; set; } = 0;
 
     public Store()
     {
@@ -12,7 +13,7 @@ namespace vendingMachine_mvc.Models
       {
         // Implicit casting from berverate to beverage type.
         new Soda("Pepsi",BevType.soda, .75f, false),
-        new Soda("Diet Pepsi", BevType.soda, .75f, true),
+        new Soda("Coke Zero", BevType.soda, .75f, true),
         new EnergyDrink("Monster", BevType.energyDrink, 1.25f, false),
         new Juice("TreeTop", BevType.juice, .95f, "Apple"),
         new Juice("Welches", BevType.juice, .95f, "Grape"),
